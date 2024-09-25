@@ -9,12 +9,21 @@ function Gameboard() {
   const getBoard = () => board;
 
   const markCell = (cell, marker) => {
-    if (board[cell]) {
-      board[cell].addMarker(marker);
-    }
+    if (board[cell].getValue() != 0) return;
+    // If cell not marked, dont change player turn
+    board[cell].addMarker(marker);
   };
 
-  const printBoard = () => {};
+  const printBoard = () => {
+    // for(let i = 0; i < length; i++){
+    //   if
+    // }
+    console.log(`
+      ${board[0].getValue()} ${board[1].getValue()} ${board[2].getValue()}
+      ${board[3].getValue()} ${board[4].getValue()} ${board[5].getValue()}
+      ${board[6].getValue()} ${board[7].getValue()} ${board[8].getValue()}
+      `);
+  };
 
   return { getBoard, markCell, printBoard };
 }
