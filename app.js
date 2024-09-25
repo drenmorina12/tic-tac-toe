@@ -1,22 +1,36 @@
 function Gameboard() {
-  const rows = 3;
-  const cols = 3;
+  const length = 9;
   const board = [];
 
-  for (let i = 0; i < rows; i++) {
-    board[i] = [];
-    for (let j = 0; j < cols; j++) board[i].push(Cell());
+  for (let i = 0; i < length; i++) {
+    board.push(Cell());
   }
 
   const getBoard = () => board;
 
-  const markCell = (cell, marker) => {};
+  const markCell = (cell, marker) => {
+    if (board[cell]) {
+      board[cell].addMarker(marker);
+    }
+  };
 
   const printBoard = () => {};
 
-  function Cell() {}
-
   return { getBoard, markCell, printBoard };
+}
+
+function Cell() {
+  let value = 0;
+
+  const addMarker = (player) => {
+    value = player;
+  };
+  // If cell empty, it changes its value
+
+  const getValue = () => value;
+  // Get value checks if cell is empty or not
+
+  return { addMarker, getValue };
 }
 
 function createPlayer(name, token) {
@@ -54,3 +68,9 @@ function GameController(
 }
 
 GameController();
+
+const board1 = Gameboard();
+// board1.markCell(0, 1); // Mark cell 0 with player 1
+// console.log(board1.getBoard()[0]);
+// console.log(board1.getBoard());
+// console.log(board1.getBoard()[0].getValue());
