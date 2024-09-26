@@ -125,7 +125,33 @@ function GameController(
 
 function ScreenController() {
   const game = GameController();
+
+  const boardDiv = document.querySelector("#board");
+  const playerDiv = document.querySelector(".player-turn");
+
+  const updateScreen = () => {
+    boardDiv.textContent = "";
+
+    const board = game.getBoard();
+    const currentPlayer = game.getCurrentPlayer();
+
+    playerDiv.textContent = `${currentPlayer.name}'s turn...`;
+
+    board.forEach((row, index) => {
+      const cell = document.createElement("div");
+      cell.classList.add("cells");
+
+      cell.dataset.cell = index;
+      cell.textContent = row.getValue();
+
+      boardDiv.appendChild(cell);
+    });
+  };
+
+  updateScreen();
 }
+
+ScreenController();
 
 const game1 = GameController();
 
