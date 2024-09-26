@@ -9,14 +9,10 @@ function Gameboard() {
   const getBoard = () => board;
 
   const markCell = (cell, marker) => {
-    // If cell not marked, dont change player turn
     board[cell].addMarker(marker);
   };
 
   const printBoard = () => {
-    // for(let i = 0; i < length; i++){
-    //   if
-    // }
     console.log(`
       ${board[0].getValue()} ${board[1].getValue()} ${board[2].getValue()}
       ${board[3].getValue()} ${board[4].getValue()} ${board[5].getValue()}
@@ -33,16 +29,15 @@ function Cell() {
   const addMarker = (player) => {
     value = player;
   };
-  // If cell empty, it changes its value
 
   const getValue = () => value;
-  // Get value checks if cell is empty or not
 
   return { addMarker, getValue };
 }
 
 function createPlayer(name, token) {
   return { name, token };
+  // Add wins, to keep track of how many wins a player has
 }
 
 function GameController(
@@ -86,7 +81,9 @@ function GameController(
     board.markCell(cell, currentPlayer.token);
 
     if (checkWin(currentPlayer)) {
-      console.log(`${currentPlayer.name} has won!`);
+      gameOver(false);
+    } else if (isDraw()) {
+      gameOver(true);
     }
 
     board.printBoard();
@@ -102,9 +99,20 @@ function GameController(
     });
   };
 
-  const isDraw = () => {};
+  const isDraw = () => {
+    const isBoardFull = board.getBoard().every((obj) => obj.getValue() !== 0);
+    return isBoardFull;
+  };
 
-  const gameOver = () => {};
+  const gameOver = (draw) => {
+    if (draw) {
+      console.log("Game is a draw!");
+    } else {
+      console.log(
+        `The winner is: ${currentPlayer.name} (${currentPlayer.token})`
+      );
+    }
+  };
 
   return { playRound, getBoard: board.getBoard, getCurrentPlayer };
 }
@@ -112,7 +120,3 @@ function GameController(
 const game = GameController();
 
 const board1 = Gameboard();
-// board1.markCell(0, 1); // Mark cell 0 with player 1
-// console.log(board1.getBoard()[0]);
-// console.log(board1.getBoard());
-// console.log(board1.getBoard()[0].getValue());
