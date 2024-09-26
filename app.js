@@ -9,7 +9,6 @@ function Gameboard() {
   const getBoard = () => board;
 
   const markCell = (cell, marker) => {
-    if (board[cell].getValue() != 0) return;
     // If cell not marked, dont change player turn
     board[cell].addMarker(marker);
   };
@@ -52,9 +51,22 @@ function GameController(
 ) {
   const board = Gameboard();
 
+  const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  board.printBoard();
+
   const players = [
     createPlayer(playerOneName, "x"),
-    createPlayer(playerTwoName, "circle"),
+    createPlayer(playerTwoName, "o"),
   ];
 
   let currentPlayer = players[0];
@@ -65,9 +77,30 @@ function GameController(
     currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
   };
 
-  const playRound = (cell) => {};
+  const playRound = (cell) => {
+    if (board.getBoard()[cell].getValue() != 0) {
+      console.log("Invalid cell!");
+      return;
+    }
+    console.log("Valid move");
+    board.markCell(cell, currentPlayer.token);
 
-  const checkWin = (currentPlayer) => {};
+    if (checkWin(currentPlayer)) {
+      console.log(`${currentPlayer.name} has won!`);
+    }
+
+    board.printBoard();
+
+    switchPlayerTrun();
+  };
+
+  const checkWin = (currentPlayer) => {
+    return winningCombinations.some((combination) => {
+      return combination.every((index) => {
+        return board.getBoard()[index].getValue() === currentPlayer.token;
+      });
+    });
+  };
 
   const isDraw = () => {};
 
@@ -76,7 +109,7 @@ function GameController(
   return { playRound, getBoard: board.getBoard, getCurrentPlayer };
 }
 
-GameController();
+const game = GameController();
 
 const board1 = Gameboard();
 // board1.markCell(0, 1); // Mark cell 0 with player 1
