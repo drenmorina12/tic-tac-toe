@@ -1,3 +1,9 @@
+/*TODO:
+ * Reset board when game ends
+ * Create module for displaying the game
+ * Create the UI
+ */
+
 function Gameboard() {
   const length = 9;
   const board = [];
@@ -117,6 +123,10 @@ function GameController(
   return { playRound, getBoard: board.getBoard, getCurrentPlayer };
 }
 
-const game = GameController();
+function ScreenController() {
+  const game = GameController();
+}
+
+const game1 = GameController();
 
 const board1 = Gameboard();
