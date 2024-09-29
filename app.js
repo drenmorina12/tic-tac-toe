@@ -140,6 +140,7 @@ function ScreenController() {
     board.forEach((row, index) => {
       const cell = document.createElement("div");
       cell.classList.add("cells");
+      // cell.classList.add("x");
 
       cell.dataset.cell = index;
       cell.textContent = row.getValue();

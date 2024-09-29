@@ -98,3 +98,35 @@ h3 {
 .cells:nth-child(3n + 3) {
   border-right: none;
 }
+
+/* Create X and Circle effects */
+
+.cells.x::before,
+.cells.x::after {
+  background-color: #000000;
+}
+
+#board.x .cells:not(.x):not(.circle):hover::before,
+#board.x .cells:not(.x):not(.circle):hover::after {
+  background-color: lightgrey;
+}
+
+.cells.x::before,
+.cells.x::after,
+#board.x .cells:not(.x):not(.circle):hover::before,
+#board.x .cells:not(.x):not(.circle):hover::after {
+  content: "";
+  position: absolute;
+  width: calc(var(--mark-size) * 0.15);
+  height: var(--mark-size);
+}
+
+.cells.x::before,
+#board.x .cells:not(.x):not(.circle):hover::before {
+  transform: rotate(45deg);
+}
+
+.cells.x::after,
+#board.x .cells:not(.x):not(.circle):hover::after {
+  transform: rotate(-45deg);
+}
