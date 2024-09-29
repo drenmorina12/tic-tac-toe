@@ -101,6 +101,8 @@ h3 {
 
 /* Create X and Circle effects */
 
+/* x */
+
 .cells.x::before,
 .cells.x::after {
   background-color: #000000;
@@ -129,4 +131,38 @@ h3 {
 .cells.x::after,
 #board.x .cells:not(.x):not(.circle):hover::after {
   transform: rotate(-45deg);
+}
+
+/* circle */
+
+.cells.circle::before,
+.cells.circle::after {
+  background-color: #000000;
+}
+
+#board.circle .cells:not(.x):not(.circle):hover::before,
+#board.circle .cells:not(.x):not(.circle):hover::after {
+  background-color: lightgrey;
+}
+
+.cells.circle::before,
+.cells.circle::after,
+#board.circle .cells:not(.x):not(.circle):hover::before,
+#board.circle .cells:not(.x):not(.circle):hover::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.cells.circle::before,
+#board.circle .cells:not(.x):not(.circle):hover::before {
+  width: var(--mark-size);
+  height: var(--mark-size);
+}
+
+.cells.circle::after,
+#board.circle .cells:not(.x):not(.circle):hover::after {
+  width: calc(var(--mark-size) * 0.7);
+  height: calc(var(--mark-size) * 0.7);
+  background-color: #f4eae0;
 }

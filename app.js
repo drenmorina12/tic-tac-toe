@@ -141,6 +141,7 @@ function ScreenController() {
       const cell = document.createElement("div");
       cell.classList.add("cells");
       // cell.classList.add("x");
+      cell.classList.add("circle");
 
       cell.dataset.cell = index;
       cell.textContent = row.getValue();
