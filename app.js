@@ -141,7 +141,7 @@ function ScreenController() {
       const cell = document.createElement("div");
       cell.classList.add("cells");
       // cell.classList.add("x");
-      cell.classList.add("circle");
+      // cell.classList.add("circle");
 
       cell.dataset.cell = index;
       cell.textContent = row.getValue();
@@ -150,7 +150,16 @@ function ScreenController() {
     });
   };
 
-  const clickHandlerBoard = () => {};
+  const clickHandlerBoard = (e) => {
+    const clickedCell = e.target.dataset.cell;
+
+    if (!clickedCell) return;
+
+    game.playRound(clickedCell);
+    updateScreen();
+  };
+
+  boardDiv.addEventListener("click", clickHandlerBoard);
 
   updateScreen();
 }
