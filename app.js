@@ -3,6 +3,8 @@
  * Create module for displaying the game
  * Create the UI
  */
+const X_CLASS = "x";
+const CIRCLE_CLASS = "circle";
 
 function Gameboard() {
   const length = 9;
@@ -66,22 +68,22 @@ function GameController(
   board.printBoard();
 
   const players = [
-    createPlayer(playerOneName, "x"),
-    createPlayer(playerTwoName, "o"),
+    createPlayer(playerOneName, X_CLASS),
+    createPlayer(playerTwoName, CIRCLE_CLASS),
   ];
 
   let currentPlayer = players[0];
 
   const getCurrentPlayer = () => currentPlayer;
 
-  const switchPlayerTrun = () => {
+  const switchPlayerTurn = () => {
     currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
   };
 
   const playRound = (cell) => {
     if (board.getBoard()[cell].getValue() != 0) {
       console.log("Invalid cell!");
-      return;
+      return false;
     }
     console.log("Valid move");
     board.markCell(cell, currentPlayer.token);
@@ -94,7 +96,7 @@ function GameController(
 
     board.printBoard();
 
-    switchPlayerTrun();
+    switchPlayerTurn();
   };
 
   const checkWin = (currentPlayer) => {
@@ -144,24 +146,52 @@ function ScreenController() {
       // cell.classList.add("circle");
 
       cell.dataset.cell = index;
-      cell.textContent = row.getValue();
+      if (row.getValue() == X_CLASS || row.getValue() == CIRCLE_CLASS) {
+        cell.classList.add(row.getValue());
+      }
 
       boardDiv.appendChild(cell);
     });
   };
 
   const clickHandlerBoard = (e) => {
+    
     const clickedCell = e.target.dataset.cell;
 
     if (!clickedCell) return;
 
-    game.playRound(clickedCell);
+    const playerToken = game.getCurrentPlayer().token;
+    console.log("HERE: " + playerToken);
+
+    if (game.playRound(clickedCell) == false) {
+      return;
+    }
+
+    hoverClassUpdate(game.getCurrentPlayer().token);
+    playedClassUpdate(playerToken, e.target);
+
     updateScreen();
+  };
+
+  const hoverClassUpdate = (playerToken) => {
+    boardDiv.classList.remove(X_CLASS);
+    boardDiv.classList.remove(CIRCLE_CLASS);
+    if (playerToken == X_CLASS) {
+      boardDiv.classList.add(X_CLASS);
+    } else {
+      boardDiv.classList.add(CIRCLE_CLASS);
+    }
+  };
+  const playedClassUpdate = (playerToken, clickedCell) => {
+    // console.log("Here: " + playerToken);
+    console.log(clickedCell);
+    clickedCell.classList.add(playerToken);
   };
 
   boardDiv.addEventListener("click", clickHandlerBoard);
 
   updateScreen();
+  hoverClassUpdate(game.getCurrentPlayer().token);
 }
 
 ScreenController();
