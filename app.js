@@ -148,6 +148,8 @@ function ScreenController() {
     });
   };
 
+  const clickHandlerBoard = () => {};
+
   updateScreen();
 }
 

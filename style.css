@@ -1,3 +1,8 @@
+:root {
+  --cell-size: 100px;
+  --mark-size: calc(var(--cell-size) * 0.9);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -51,9 +56,45 @@ h3 {
 }
 
 #board {
-  height: 300px;
-  width: 300px;
-  border: 1px solid black;
+  /* height: 300px; */
+  /* width: 300px; */
+  /* border: 1px solid black; */
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  /* justify-content: center; */
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
 }
 
+.cells {
+  border: 1px solid black;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
 
+.cells:first-child,
+.cells:nth-child(2),
+.cells:nth-child(3) {
+  border-top: none;
+}
+
+.cells:nth-child(7),
+.cells:nth-child(8),
+.cells:last-child {
+  border-bottom: none;
+}
+
+.cells:nth-child(3n + 1) {
+  border-left: none;
+}
+
+.cells:nth-child(3n + 3) {
+  border-right: none;
+}
