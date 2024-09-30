@@ -95,6 +95,10 @@ h3 {
   border-radius: 10px;
 }
 
+.player-turn {
+  font-size: 1.5rem;
+}
+
 #board {
   /* height: 300px; */
   /* width: 300px; */
@@ -225,3 +229,13 @@ h3 {
 }
 
 /* -- */
+
+.dialog {
+  padding: 0;
+  border: 0;
+}
+.restart-btn {
+  height: 40px;
+  width: 70px;
+  font-size: 1rem;
+}

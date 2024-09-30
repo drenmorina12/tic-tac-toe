@@ -1,6 +1,5 @@
 /*TODO:
- * Reset board when game ends
- * Add dialog box to prompt user to restart game
+ * When game is over, show who won / if it was a draw
  */
 const X_CLASS = "x";
 const CIRCLE_CLASS = "circle";
@@ -175,6 +174,7 @@ function ScreenController() {
   const editName1 = document.querySelector(".edit-name1");
   const editName2 = document.querySelector(".edit-name2");
   const restartBtn = document.querySelector(".restart-btn");
+  const dialog = document.querySelector(".dialog");
 
   const updateScreen = () => {
     boardDiv.textContent = "";
@@ -182,7 +182,7 @@ function ScreenController() {
     const board = game.getBoard();
     const currentPlayer = game.getCurrentPlayer();
 
-    playerDiv.textContent = `${currentPlayer.getName()}'s turn...`;
+    playerDiv.textContent = `${game.getCurrentPlayer().getName()}'s turn...`;
 
     board.forEach((row, index) => {
       const cell = document.createElement("div");
@@ -208,13 +208,14 @@ function ScreenController() {
     if (playeRound == false) {
       return;
     } else if (playeRound == "draw") {
-      console.log("YEEEEEEEEEEEEEEEEEEEEEEE");
+      dialog.showModal();
     } else if (playeRound == "win") {
       game.getCurrentPlayer().getToken() == "x"
         ? (player1Score.textContent =
             "Score: " + game.getCurrentPlayer().getPlayerScore())
         : (player2Score.textContent =
             "Score: " + game.getCurrentPlayer().getPlayerScore());
+      dialog.showModal();
     }
     hoverClassUpdate(game.getCurrentPlayer().getToken());
     playedClassUpdate(playerToken, e.target);
@@ -242,13 +243,20 @@ function ScreenController() {
     player2Name.textContent = game.players[1].getName();
 
     boardDiv.addEventListener("click", clickHandlerBoard);
+
     editName1.addEventListener("click", () => {
       const promptName = prompt("Name");
+      game.players[0].changeName(promptName);
+      playerDiv.textContent = `${game.getCurrentPlayer().getName()}'s turn...`;
+
       player1Name.textContent = promptName;
     });
 
     editName2.addEventListener("click", () => {
       const promptName = prompt("Name");
+      game.players[1].changeName(promptName);
+      playerDiv.textContent = `${game.getCurrentPlayer().getName()}'s turn...`;
+
       player2Name.textContent = promptName;
     });
 
@@ -256,6 +264,7 @@ function ScreenController() {
       game.restartGame();
       updateScreen();
       hoverClassUpdate(game.players[0].getToken());
+      dialog.close();
     });
 
     updateScreen();
