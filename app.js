@@ -18,6 +18,7 @@ function Gameboard() {
     board[cell].addMarker(marker);
   };
 
+  // For console version
   const printBoard = () => {
     console.log(`
       ${board[0].getValue()} ${board[1].getValue()} ${board[2].getValue()}
@@ -46,9 +47,7 @@ function Cell() {
 
   const getValue = () => value;
 
-  const resetValue = () => (value = 0);
-
-  return { addMarker, getValue, resetValue };
+  return { addMarker, getValue };
 }
 
 function createPlayer(name, token) {
@@ -64,7 +63,6 @@ function createPlayer(name, token) {
 
   const getToken = () => token;
   return { getName, getToken, getPlayerScore, addScore, changeName };
-  // Add wins, to keep track of how many wins a player has
 }
 
 function GameController(
@@ -101,10 +99,8 @@ function GameController(
 
   const playRound = (cell) => {
     if (board.getBoard()[cell].getValue() != 0) {
-      console.log("Invalid cell!");
       return false;
     }
-    console.log("Valid move");
     board.markCell(cell, currentPlayer.getToken());
 
     if (checkWin(currentPlayer)) {
@@ -113,6 +109,7 @@ function GameController(
       return gameOver(true);
     }
 
+    // For console
     board.printBoard();
 
     switchPlayerTurn();
@@ -133,16 +130,14 @@ function GameController(
 
   const gameOver = (draw) => {
     if (draw) {
-      console.log("Game is a draw!");
+      // TODO: Optimise
       return "draw";
     } else {
       console.log(
         `The winner is: ${currentPlayer.getName()} (${currentPlayer.getToken()})`
       );
       currentPlayer.addScore();
-      console.log(
-        `${currentPlayer.getName()}: ${currentPlayer.getPlayerScore()}`
-      );
+
       return "win";
     }
   };
@@ -156,13 +151,12 @@ function GameController(
     playRound,
     getBoard: board.getBoard,
     getCurrentPlayer,
-    // resetBoard: board.resetBoard,
     restartGame,
     players,
   };
 }
 
-function ScreenController() {
+const ScreenController = (function () {
   const game = GameController();
 
   const boardDiv = document.querySelector("#board");
@@ -182,7 +176,7 @@ function ScreenController() {
     const board = game.getBoard();
     const currentPlayer = game.getCurrentPlayer();
 
-    playerDiv.textContent = `${game.getCurrentPlayer().getName()}'s turn...`;
+    playerDiv.textContent = `${currentPlayer.getName()}'s turn...`;
 
     board.forEach((row, index) => {
       const cell = document.createElement("div");
@@ -210,7 +204,7 @@ function ScreenController() {
     } else if (playeRound == "draw") {
       dialog.showModal();
     } else if (playeRound == "win") {
-      game.getCurrentPlayer().getToken() == "x"
+      game.getCurrentPlayer().getToken() == X_CLASS
         ? (player1Score.textContent =
             "Score: " + game.getCurrentPlayer().getPlayerScore())
         : (player2Score.textContent =
@@ -238,7 +232,6 @@ function ScreenController() {
   };
 
   const initFunction = () => {
-    player1Name.textContent = "SUIII";
     player1Name.textContent = game.players[0].getName();
     player2Name.textContent = game.players[1].getName();
 
@@ -272,10 +265,4 @@ function ScreenController() {
   };
 
   initFunction();
-}
-
-ScreenController();
-
-const game1 = GameController();
-
-const board1 = Gameboard();
+})();
