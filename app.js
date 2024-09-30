@@ -44,7 +44,11 @@ function Cell() {
 }
 
 function createPlayer(name, token) {
-  return { name, token };
+  let score = 0;
+
+  const getPlayerScore = () => score;
+  const addScore = () => score++;
+  return { name, token, getPlayerScore, addScore };
   // Add wins, to keep track of how many wins a player has
 }
 
@@ -89,9 +93,9 @@ function GameController(
     board.markCell(cell, currentPlayer.token);
 
     if (checkWin(currentPlayer)) {
-      gameOver(false);
+      return gameOver(false);
     } else if (isDraw()) {
-      gameOver(true);
+      return gameOver(true);
     }
 
     board.printBoard();
@@ -115,10 +119,14 @@ function GameController(
   const gameOver = (draw) => {
     if (draw) {
       console.log("Game is a draw!");
+      return "draw";
     } else {
       console.log(
         `The winner is: ${currentPlayer.name} (${currentPlayer.token})`
       );
+      currentPlayer.addScore();
+      console.log(`${currentPlayer.name}: ${currentPlayer.getPlayerScore()}`);
+      return "win";
     }
   };
 
@@ -130,6 +138,8 @@ function ScreenController() {
 
   const boardDiv = document.querySelector("#board");
   const playerDiv = document.querySelector(".player-turn");
+  const player1Score = document.querySelector(".player1-score");
+  const player2Score = document.querySelector(".player2-score");
 
   const updateScreen = () => {
     boardDiv.textContent = "";
@@ -142,8 +152,6 @@ function ScreenController() {
     board.forEach((row, index) => {
       const cell = document.createElement("div");
       cell.classList.add("cells");
-      // cell.classList.add("x");
-      // cell.classList.add("circle");
 
       cell.dataset.cell = index;
       if (row.getValue() == X_CLASS || row.getValue() == CIRCLE_CLASS) {
@@ -155,18 +163,22 @@ function ScreenController() {
   };
 
   const clickHandlerBoard = (e) => {
-    
     const clickedCell = e.target.dataset.cell;
 
     if (!clickedCell) return;
 
     const playerToken = game.getCurrentPlayer().token;
-    console.log("HERE: " + playerToken);
 
-    if (game.playRound(clickedCell) == false) {
+    const playeRound = game.playRound(clickedCell);
+    if (playeRound == false) {
       return;
+    } else if (playeRound == "draw") {
+      console.log("YEEEEEEEEEEEEEEEEEEEEEEE");
+    } else if (playeRound == "win") {
+      game.getCurrentPlayer().token == "x"
+        ? (player1Score.textContent = game.getCurrentPlayer().getPlayerScore())
+        : (player2Score.textContent = game.getCurrentPlayer().getPlayerScore());
     }
-
     hoverClassUpdate(game.getCurrentPlayer().token);
     playedClassUpdate(playerToken, e.target);
 
@@ -182,16 +194,18 @@ function ScreenController() {
       boardDiv.classList.add(CIRCLE_CLASS);
     }
   };
+
   const playedClassUpdate = (playerToken, clickedCell) => {
-    // console.log("Here: " + playerToken);
-    console.log(clickedCell);
     clickedCell.classList.add(playerToken);
   };
 
-  boardDiv.addEventListener("click", clickHandlerBoard);
+  const initFunction = () => {
+    boardDiv.addEventListener("click", clickHandlerBoard);
+    updateScreen();
+    hoverClassUpdate(game.getCurrentPlayer().token);
+  };
 
-  updateScreen();
-  hoverClassUpdate(game.getCurrentPlayer().token);
+  initFunction();
 }
 
 ScreenController();
