@@ -1,14 +1,13 @@
 /*TODO:
  * Reset board when game ends
- * Create module for displaying the game
- * Create the UI
+ * Add dialog box to prompt user to restart game
  */
 const X_CLASS = "x";
 const CIRCLE_CLASS = "circle";
 
 function Gameboard() {
   const length = 9;
-  const board = [];
+  let board = [];
 
   for (let i = 0; i < length; i++) {
     board.push(Cell());
@@ -28,7 +27,15 @@ function Gameboard() {
       `);
   };
 
-  return { getBoard, markCell, printBoard };
+  const resetBoard = () => {
+    board = [];
+
+    for (let i = 0; i < length; i++) {
+      board.push(Cell());
+    }
+  };
+
+  return { getBoard, markCell, printBoard, resetBoard };
 }
 
 function Cell() {
@@ -40,7 +47,9 @@ function Cell() {
 
   const getValue = () => value;
 
-  return { addMarker, getValue };
+  const resetValue = () => (value = 0);
+
+  return { addMarker, getValue, resetValue };
 }
 
 function createPlayer(name, token) {
@@ -139,7 +148,19 @@ function GameController(
     }
   };
 
-  return { playRound, getBoard: board.getBoard, getCurrentPlayer, players };
+  const restartGame = () => {
+    board.resetBoard();
+    currentPlayer = players[0];
+  };
+
+  return {
+    playRound,
+    getBoard: board.getBoard,
+    getCurrentPlayer,
+    // resetBoard: board.resetBoard,
+    restartGame,
+    players,
+  };
 }
 
 function ScreenController() {
@@ -153,6 +174,7 @@ function ScreenController() {
   const player2Name = document.querySelector(".player2-name");
   const editName1 = document.querySelector(".edit-name1");
   const editName2 = document.querySelector(".edit-name2");
+  const restartBtn = document.querySelector(".restart-btn");
 
   const updateScreen = () => {
     boardDiv.textContent = "";
@@ -230,8 +252,14 @@ function ScreenController() {
       player2Name.textContent = promptName;
     });
 
+    restartBtn.addEventListener("click", () => {
+      game.restartGame();
+      updateScreen();
+      hoverClassUpdate(game.players[0].getToken());
+    });
+
     updateScreen();
-    hoverClassUpdate(game.getCurrentPlayer().getToken());
+    hoverClassUpdate(game.players[0].getToken());
   };
 
   initFunction();
