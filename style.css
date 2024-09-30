@@ -171,3 +171,16 @@ h3 {
   height: calc(var(--mark-size) * 0.7);
   background-color: #f4eae0;
 }
+
+.edit-name1,
+.edit-name2 {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 10px;
+}
+
+.edit-name1:hover,
+.edit-name2:hover {
+  cursor: pointer;
+}

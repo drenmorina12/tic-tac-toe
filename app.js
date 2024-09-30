@@ -48,7 +48,14 @@ function createPlayer(name, token) {
 
   const getPlayerScore = () => score;
   const addScore = () => score++;
-  return { name, token, getPlayerScore, addScore };
+
+  const getName = () => name;
+  const changeName = (newName) => {
+    name = newName;
+  };
+
+  const getToken = () => token;
+  return { getName, getToken, getPlayerScore, addScore, changeName };
   // Add wins, to keep track of how many wins a player has
 }
 
@@ -90,7 +97,7 @@ function GameController(
       return false;
     }
     console.log("Valid move");
-    board.markCell(cell, currentPlayer.token);
+    board.markCell(cell, currentPlayer.getToken());
 
     if (checkWin(currentPlayer)) {
       return gameOver(false);
@@ -106,7 +113,7 @@ function GameController(
   const checkWin = (currentPlayer) => {
     return winningCombinations.some((combination) => {
       return combination.every((index) => {
-        return board.getBoard()[index].getValue() === currentPlayer.token;
+        return board.getBoard()[index].getValue() === currentPlayer.getToken();
       });
     });
   };
@@ -122,15 +129,17 @@ function GameController(
       return "draw";
     } else {
       console.log(
-        `The winner is: ${currentPlayer.name} (${currentPlayer.token})`
+        `The winner is: ${currentPlayer.getName()} (${currentPlayer.getToken()})`
       );
       currentPlayer.addScore();
-      console.log(`${currentPlayer.name}: ${currentPlayer.getPlayerScore()}`);
+      console.log(
+        `${currentPlayer.getName()}: ${currentPlayer.getPlayerScore()}`
+      );
       return "win";
     }
   };
 
-  return { playRound, getBoard: board.getBoard, getCurrentPlayer };
+  return { playRound, getBoard: board.getBoard, getCurrentPlayer, players };
 }
 
 function ScreenController() {
@@ -140,6 +149,10 @@ function ScreenController() {
   const playerDiv = document.querySelector(".player-turn");
   const player1Score = document.querySelector(".player1-score");
   const player2Score = document.querySelector(".player2-score");
+  const player1Name = document.querySelector(".player1-name");
+  const player2Name = document.querySelector(".player2-name");
+  const editName1 = document.querySelector(".edit-name1");
+  const editName2 = document.querySelector(".edit-name2");
 
   const updateScreen = () => {
     boardDiv.textContent = "";
@@ -147,7 +160,7 @@ function ScreenController() {
     const board = game.getBoard();
     const currentPlayer = game.getCurrentPlayer();
 
-    playerDiv.textContent = `${currentPlayer.name}'s turn...`;
+    playerDiv.textContent = `${currentPlayer.getName()}'s turn...`;
 
     board.forEach((row, index) => {
       const cell = document.createElement("div");
@@ -167,7 +180,7 @@ function ScreenController() {
 
     if (!clickedCell) return;
 
-    const playerToken = game.getCurrentPlayer().token;
+    const playerToken = game.getCurrentPlayer().getToken();
 
     const playeRound = game.playRound(clickedCell);
     if (playeRound == false) {
@@ -175,11 +188,11 @@ function ScreenController() {
     } else if (playeRound == "draw") {
       console.log("YEEEEEEEEEEEEEEEEEEEEEEE");
     } else if (playeRound == "win") {
-      game.getCurrentPlayer().token == "x"
+      game.getCurrentPlayer().getToken() == "x"
         ? (player1Score.textContent = game.getCurrentPlayer().getPlayerScore())
         : (player2Score.textContent = game.getCurrentPlayer().getPlayerScore());
     }
-    hoverClassUpdate(game.getCurrentPlayer().token);
+    hoverClassUpdate(game.getCurrentPlayer().getToken());
     playedClassUpdate(playerToken, e.target);
 
     updateScreen();
@@ -200,9 +213,23 @@ function ScreenController() {
   };
 
   const initFunction = () => {
+    player1Name.textContent = "SUIII";
+    player1Name.textContent = game.players[0].getName();
+    player2Name.textContent = game.players[1].getName();
+
     boardDiv.addEventListener("click", clickHandlerBoard);
+    editName1.addEventListener("click", () => {
+      const promptName = prompt("Name");
+      player1Name.textContent = promptName;
+    });
+
+    editName2.addEventListener("click", () => {
+      const promptName = prompt("Name");
+      player2Name.textContent = promptName;
+    });
+
     updateScreen();
-    hoverClassUpdate(game.getCurrentPlayer().token);
+    hoverClassUpdate(game.getCurrentPlayer().getToken());
   };
 
   initFunction();
