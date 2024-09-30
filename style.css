@@ -28,12 +28,46 @@ h3 {
 }
 
 .player-container {
+  width: 20rem;
   align-self: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
+  gap: 50px;
   margin-top: 50px;
+}
+
+.player-container > div > h3 {
+  font-size: 1.5rem;
+}
+
+.player1-logo,
+.player2-logo {
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.player-container div:nth-child(2) {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-name1,
+.edit-name2 {
+  width: 20px;
+  height: 20px;
+}
+
+.edit-name1:hover,
+.edit-name2:hover {
+  cursor: pointer;
 }
 
 #main {
@@ -109,7 +143,9 @@ h3 {
 /* x */
 
 .cells.x::before,
-.cells.x::after {
+.cells.x::after,
+.player1-logo::before,
+.player1-logo::after {
   background-color: #000000;
 }
 
@@ -121,7 +157,9 @@ h3 {
 .cells.x::before,
 .cells.x::after,
 #board.x .cells:not(.x):not(.circle):hover::before,
-#board.x .cells:not(.x):not(.circle):hover::after {
+#board.x .cells:not(.x):not(.circle):hover::after,
+.player1-logo::before,
+.player1-logo::after {
   content: "";
   position: absolute;
   width: calc(var(--mark-size) * 0.15);
@@ -129,19 +167,23 @@ h3 {
 }
 
 .cells.x::before,
-#board.x .cells:not(.x):not(.circle):hover::before {
+#board.x .cells:not(.x):not(.circle):hover::before,
+.player1-logo::before {
   transform: rotate(45deg);
 }
 
 .cells.x::after,
-#board.x .cells:not(.x):not(.circle):hover::after {
+#board.x .cells:not(.x):not(.circle):hover::after,
+.player1-logo::after {
   transform: rotate(-45deg);
 }
 
 /* circle */
 
 .cells.circle::before,
-.cells.circle::after {
+.cells.circle::after,
+.player2-logo::before,
+.player2-logo::after {
   background-color: #000000;
 }
 
@@ -153,34 +195,27 @@ h3 {
 .cells.circle::before,
 .cells.circle::after,
 #board.circle .cells:not(.x):not(.circle):hover::before,
-#board.circle .cells:not(.x):not(.circle):hover::after {
+#board.circle .cells:not(.x):not(.circle):hover::after,
+.player2-logo::before,
+.player2-logo::after {
   content: "";
   position: absolute;
   border-radius: 50%;
 }
 
 .cells.circle::before,
-#board.circle .cells:not(.x):not(.circle):hover::before {
+#board.circle .cells:not(.x):not(.circle):hover::before,
+.player2-logo::before {
   width: var(--mark-size);
   height: var(--mark-size);
 }
 
 .cells.circle::after,
-#board.circle .cells:not(.x):not(.circle):hover::after {
+#board.circle .cells:not(.x):not(.circle):hover::after,
+.player2-logo::after {
   width: calc(var(--mark-size) * 0.7);
   height: calc(var(--mark-size) * 0.7);
   background-color: #f4eae0;
 }
 
-.edit-name1,
-.edit-name2 {
-  width: 20px;
-  height: 20px;
-  background-color: red;
-  border-radius: 10px;
-}
-
-.edit-name1:hover,
-.edit-name2:hover {
-  cursor: pointer;
-}
+/* -- */

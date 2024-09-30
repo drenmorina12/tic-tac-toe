@@ -189,8 +189,10 @@ function ScreenController() {
       console.log("YEEEEEEEEEEEEEEEEEEEEEEE");
     } else if (playeRound == "win") {
       game.getCurrentPlayer().getToken() == "x"
-        ? (player1Score.textContent = game.getCurrentPlayer().getPlayerScore())
-        : (player2Score.textContent = game.getCurrentPlayer().getPlayerScore());
+        ? (player1Score.textContent =
+            "Score: " + game.getCurrentPlayer().getPlayerScore())
+        : (player2Score.textContent =
+            "Score: " + game.getCurrentPlayer().getPlayerScore());
     }
     hoverClassUpdate(game.getCurrentPlayer().getToken());
     playedClassUpdate(playerToken, e.target);
